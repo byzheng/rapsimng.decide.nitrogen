@@ -2,7 +2,7 @@
 	list(
 		name = "flower",
 		title = "Flowering",
-		description = "Flowering time summary of the sowing window suitability evaluation.",
+		description = "Flowering time summary of the nitrogen suitability evaluation.",
 		evaluate = .evaluate_section_flower,
 		document = .document_section_flower
 	)
@@ -24,7 +24,7 @@
 		dplyr::mutate(
 			flower = .data[[state$columns$flower]]
 		) |>
-		dplyr::group_by(.data[[state$columns$sowing_window]]) |>
+		dplyr::group_by(.data[[state$columns$fertilisation]]) |>
 		dplyr::summarise(
 			flower_mean = mean(.data$flower, na.rm = TRUE),
 			flower_sd = stats::sd(.data$flower, na.rm = TRUE),
@@ -47,16 +47,16 @@
 		name = c("flower_mean", "flower_sd", "flower_cv", "flower_q5", "flower_q10", "flower_q25", "flower_median", "flower_q75", "flower_q90", "flower_q95"),
 		title = c("Average Flowering Time", "Flowering Time Standard Deviation", "Flowering Time Coefficient of Variation", "5th Percentile Flowering Time", "10th Percentile Flowering Time", "25th Percentile Flowering Time", "Median Flowering Time", "75th Percentile Flowering Time", "90th Percentile Flowering Time", "95th Percentile Flowering Time"),
 		   description = c(
-			   "The average flowering time across all years for each sowing window.",
-			   "The standard deviation of flowering time across all years for each sowing window.",
-			   "The coefficient of variation of flowering time across all years for each sowing window, calculated as the standard deviation divided by the mean.",
-			   "The 5th percentile of flowering time across all years for each sowing window, representing an early flowering scenario.",
-			   "The 10th percentile of flowering time across all years for each sowing window, representing a very early flowering scenario.",
-			   "The 25th percentile of flowering time across all years for each sowing window, representing a below-average flowering time scenario.",
-			   "The median flowering time across all years for each sowing window, representing a typical flowering time scenario.",
-			   "The 75th percentile of flowering time across all years for each sowing window, representing an above-average flowering time scenario.",
-			   "The 90th percentile of flowering time across all years for each sowing window, representing a late flowering scenario.",
-			   "The 95th percentile of flowering time across all years for each sowing window, representing a very late flowering scenario."
+			"The average flowering time across all years for each scenario.",
+			"The standard deviation of flowering time across all years for each scenario.",
+			"The coefficient of variation of flowering time across all years for each scenario, calculated as the standard deviation divided by the mean.",
+			"The 5th percentile of flowering time across all years for each scenario, representing an early flowering scenario.",
+			"The 10th percentile of flowering time across all years for each scenario, representing a very early flowering scenario.",
+			"The 25th percentile of flowering time across all years for each scenario, representing a below-average flowering time scenario.",
+			"The median flowering time across all years for each scenario, representing a typical flowering time scenario.",
+			"The 75th percentile of flowering time across all years for each scenario, representing an above-average flowering time scenario.",
+			"The 90th percentile of flowering time across all years for each scenario, representing a late flowering scenario.",
+			"The 95th percentile of flowering time across all years for each scenario, representing a very late flowering scenario."
 		),
 		unit = c("days", "days", "", "days", "days", "days", "days", "days", "days", "days")
 	)
@@ -65,7 +65,7 @@
 		name = "flower_summary",
 		value = values,
 		metric_def = metric_def,
-		description = "The summary statistics of flowering time across all sowing windows and years."
+		description = "The summary statistics of flowering time across all scenarios and years."
 	)
 }
 
@@ -111,7 +111,7 @@
 			dplyr::across(dplyr::all_of(columns), ~ round(.x, digits))
 		)
 
-	colnames(table_data) <- c("SowingWindow", unname(labels[columns]))
+	colnames(table_data) <- c("Scenario", unname(labels[columns]))
 	table_data
 }
 

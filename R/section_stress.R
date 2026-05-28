@@ -2,7 +2,7 @@
 	list(
 		name = "stress",
 		title = "Frost and Heat Stresses",
-		description = "Frost and heat stress summary of the sowing window suitability evaluation.",
+		description = "Frost and heat stress summary of the scenario suitability evaluation.",
 		evaluate = .evaluate_section_stress,
 		document = .document_section_stress
 	)
@@ -26,7 +26,7 @@
 			frost_reduction = .data[[state$columns$frost_reduction]],
 			frost_events = .data[[state$columns$frost_events]]
 		) |>
-		dplyr::group_by(.data[[state$columns$sowing_window]]) |>
+		dplyr::group_by(.data[[state$columns$fertilisation]]) |>
 		dplyr::summarise(
 			frost_reduction_mean = mean(.data$frost_reduction, na.rm = TRUE),
 			frost_reduction_sd = stats::sd(.data$frost_reduction, na.rm = TRUE),
@@ -62,19 +62,19 @@
 			"Median Frost Reduction Ratio", "75th Percentile Frost Reduction Ratio", "90th Percentile Frost Reduction Ratio", "95th Percentile Frost Reduction Ratio"
 		),
 		   description = c(
-			   "The average cumulative frost reduction ratio across all years for each sowing window.",
-			   "The standard deviation of cumulative frost reduction ratio across all years for each sowing window.",
-			   "The coefficient of variation of cumulative frost reduction ratio across all years for each sowing window.",
-			   "The average number of frost events across all years for each sowing window.",
-			   "The standard deviation of frost event number across all years for each sowing window.",
-			   "The coefficient of variation of frost event number across all years for each sowing window.",
-			   "The 5th percentile of cumulative frost reduction ratio across all years for each sowing window.",
-			   "The 10th percentile of cumulative frost reduction ratio across all years for each sowing window.",
-			   "The 25th percentile of cumulative frost reduction ratio across all years for each sowing window.",
-			   "The median cumulative frost reduction ratio across all years for each sowing window.",
-			   "The 75th percentile of cumulative frost reduction ratio across all years for each sowing window.",
-			   "The 90th percentile of cumulative frost reduction ratio across all years for each sowing window.",
-			   "The 95th percentile of cumulative frost reduction ratio across all years for each sowing window."
+			   "The average cumulative frost reduction ratio across all years for each scenario.",
+			   "The standard deviation of cumulative frost reduction ratio across all years for each scenario.",
+			   "The coefficient of variation of cumulative frost reduction ratio across all years for each scenario.",
+			   "The average number of frost events across all years for each scenario.",
+			   "The standard deviation of frost event number across all years for each scenario.",
+			   "The coefficient of variation of frost event number across all years for each scenario.",
+			   "The 5th percentile of cumulative frost reduction ratio across all years for each scenario.",
+			   "The 10th percentile of cumulative frost reduction ratio across all years for each scenario.",
+			   "The 25th percentile of cumulative frost reduction ratio across all years for each scenario.",
+			   "The median cumulative frost reduction ratio across all years for each scenario.",
+			   "The 75th percentile of cumulative frost reduction ratio across all years for each scenario.",
+			   "The 90th percentile of cumulative frost reduction ratio across all years for each scenario.",
+			   "The 95th percentile of cumulative frost reduction ratio across all years for each scenario."
 		),
 		unit = c("", "", "", "events", "events", "", "", "", "", "", "", "", "")
 	)
@@ -83,7 +83,7 @@
 		name = "frost_summary",
 		value = values,
 		metric_def = metric_def,
-		description = "The summary statistics of frost stress across all sowing windows and years."
+		description = "The summary statistics of frost stress across all scenarios and years."
 	)
 }
 
@@ -129,19 +129,19 @@
 			"Median Heat Reduction Ratio", "75th Percentile Heat Reduction Ratio", "90th Percentile Heat Reduction Ratio", "95th Percentile Heat Reduction Ratio"
 		),
 		   description = c(
-			   "The average cumulative heat reduction ratio across all years for each sowing window.",
-			   "The standard deviation of cumulative heat reduction ratio across all years for each sowing window.",
-			   "The coefficient of variation of cumulative heat reduction ratio across all years for each sowing window.",
-			   "The average number of heat events across all years for each sowing window.",
-			   "The standard deviation of heat event number across all years for each sowing window.",
-			   "The coefficient of variation of heat event number across all years for each sowing window.",
-			   "The 5th percentile of cumulative heat reduction ratio across all years for each sowing window.",
-			   "The 10th percentile of cumulative heat reduction ratio across all years for each sowing window.",
-			   "The 25th percentile of cumulative heat reduction ratio across all years for each sowing window.",
-			   "The median cumulative heat reduction ratio across all years for each sowing window.",
-			   "The 75th percentile of cumulative heat reduction ratio across all years for each sowing window.",
-			   "The 90th percentile of cumulative heat reduction ratio across all years for each sowing window.",
-			   "The 95th percentile of cumulative heat reduction ratio across all years for each sowing window."
+			   "The average cumulative heat reduction ratio across all years for each scenario.",
+			   "The standard deviation of cumulative heat reduction ratio across all years for each scenario.",
+			   "The coefficient of variation of cumulative heat reduction ratio across all years for each scenario.",
+			   "The average number of heat events across all years for each scenario.",
+			   "The standard deviation of heat event number across all years for each scenario.",
+			   "The coefficient of variation of heat event number across all years for each scenario.",
+			   "The 5th percentile of cumulative heat reduction ratio across all years for each scenario.",
+			   "The 10th percentile of cumulative heat reduction ratio across all years for each scenario.",
+			   "The 25th percentile of cumulative heat reduction ratio across all years for each scenario.",
+			   "The median cumulative heat reduction ratio across all years for each scenario.",
+			   "The 75th percentile of cumulative heat reduction ratio across all years for each scenario.",
+			   "The 90th percentile of cumulative heat reduction ratio across all years for each scenario.",
+			   "The 95th percentile of cumulative heat reduction ratio across all years for each scenario."
 		),
 		unit = c("", "", "", "events", "events", "", "", "", "", "", "", "", "")
 	)
@@ -150,7 +150,7 @@
 		name = "heat_summary",
 		value = values,
 		metric_def = metric_def,
-		description = "The summary statistics of heat stress across all sowing windows and years."
+		description = "The summary statistics of heat stress across all scenarios and years."
 	)
 }
 
@@ -202,7 +202,7 @@
 			dplyr::across(dplyr::all_of(columns), ~ round(.x, digits))
 		)
 
-	colnames(table_data) <- c("SowingWindow", unname(labels[columns]))
+	colnames(table_data) <- c("Scenario", unname(labels[columns]))
 	table_data
 }
 
@@ -275,8 +275,8 @@
 			"",
 			"<!--",
 			"Narrative:",
-			   "- Goal: describe frost stress patterns across sowing windows",
-			   "- Context: cumulative frost reduction ratios and frost event counts across sowing windows",
+				"- Goal: describe frost stress patterns across scenarios",
+				"- Context: cumulative frost reduction ratios and frost event counts across scenarios",
 			"- Focus: frequency and severity patterns without claiming causality beyond reported metrics",
 			"- Key metrics: mean reduction ratio, mean event number, and variability",
 			"- Style: concise, descriptive, and neutral for decision support",
@@ -284,25 +284,25 @@
 			"",
 			.render_stress_summary_table_markdown(metrics, "frost"),
 			"",
-			   ": Summary statistics of frost stress across sowing windows. {#tbl-frost-summary}",
+				": Summary statistics of frost stress across scenarios. {#tbl-frost-summary}",
 			"",
 			.render_stress_summary_metric_notes(metrics, "frost"),
 			"",
-			   "Frost reduction ratio distribution across sowing windows shown using quantile-based boxplots.",
+				"Frost reduction ratio distribution across scenarios shown using quantile-based boxplots.",
 			"",
 			"```{r}",
 			"#| label: fig-frost-summary-plot",
-			   "#| fig-cap: 'Frost stress summary across sowing windows'",
+				"#| fig-cap: 'Frost stress summary across scenarios'",
 			plot_data_lines,
-			   "sowing_window_column <- names(frost_summary_data)[[1]]",
-			   "frost_summary_plot_data <- frost_summary_data |>",
-			   "    dplyr::rename(sowing_window = dplyr::all_of(sowing_window_column)) |>",
-			   "    dplyr::arrange(dplyr::desc(frost_reduction_mean)) |>",
-			   "    dplyr::mutate(sowing_window = forcats::fct_reorder(sowing_window, frost_reduction_mean, .desc = TRUE))",
-			   "ggplot2::ggplot(",
-			   "    frost_summary_plot_data,",
-			   "    ggplot2::aes(",
-			   "        x = sowing_window,",
+				"sowing_window_column <- names(frost_summary_data)[[1]]",
+				"frost_summary_plot_data <- frost_summary_data |>",
+				"    dplyr::rename(sowing_window = dplyr::all_of(sowing_window_column)) |>",
+				"    dplyr::arrange(dplyr::desc(frost_reduction_mean)) |>",
+				"    dplyr::mutate(sowing_window = forcats::fct_reorder(sowing_window, frost_reduction_mean, .desc = TRUE))",
+				"ggplot2::ggplot(",
+				"    frost_summary_plot_data,",
+				"    ggplot2::aes(",
+				"        x = sowing_window,",
 			"        ymin = frost_reduction_q5,",
 			"        lower = frost_reduction_q25,",
 			"        middle = frost_reduction_median,",
@@ -312,7 +312,7 @@
 			") +",
 			"    ggplot2::geom_boxplot(stat = \"identity\") +",
 			"    ggplot2::coord_flip() +",
-			   "    ggplot2::labs(y = \"Frost reduction ratio\", x = \"Sowing Window\")",
+				"    ggplot2::labs(y = \"Frost reduction ratio\", x = \"Scenario\")",
 			"```"
 		)
 	)
@@ -342,8 +342,8 @@
 			"",
 			"<!--",
 			"Narrative:",
-			   "- Goal: describe heat stress patterns across sowing windows",
-			   "- Context: cumulative heat reduction ratios and heat event counts across sowing windows",
+				"- Goal: describe heat stress patterns across scenarios",
+				"- Context: cumulative heat reduction ratios and heat event counts across scenarios",
 			"- Focus: frequency and severity patterns without claiming causality beyond reported metrics",
 			"- Key metrics: mean reduction ratio, mean event number, and variability",
 			"- Style: concise, descriptive, and neutral for decision support",
@@ -351,25 +351,25 @@
 			"",
 			.render_stress_summary_table_markdown(metrics, "heat"),
 			"",
-			   ": Summary statistics of heat stress across sowing windows. {#tbl-heat-summary}",
+				": Summary statistics of heat stress across scenarios. {#tbl-heat-summary}",
 			"",
 			.render_stress_summary_metric_notes(metrics, "heat"),
 			"",
-			   "Heat reduction ratio distribution across sowing windows shown using quantile-based boxplots.",
+				"Heat reduction ratio distribution across scenarios shown using quantile-based boxplots.",
 			"",
 			"```{r}",
 			"#| label: fig-heat-summary-plot",
-			   "#| fig-cap: 'Heat stress summary across sowing windows'",
+				"#| fig-cap: 'Heat stress summary across scenarios'",
 			plot_data_lines,
-			   "sowing_window_column <- names(heat_summary_data)[[1]]",
-			   "heat_summary_plot_data <- heat_summary_data |>",
-			   "    dplyr::rename(sowing_window = dplyr::all_of(sowing_window_column)) |>",
-			   "    dplyr::arrange(dplyr::desc(heat_reduction_mean)) |>",
-			   "    dplyr::mutate(sowing_window = forcats::fct_reorder(sowing_window, heat_reduction_mean, .desc = TRUE))",
-			   "ggplot2::ggplot(",
-			   "    heat_summary_plot_data,",
-			   "    ggplot2::aes(",
-			   "        x = sowing_window,",
+				"sowing_window_column <- names(heat_summary_data)[[1]]",
+				"heat_summary_plot_data <- heat_summary_data |>",
+				"    dplyr::rename(sowing_window = dplyr::all_of(sowing_window_column)) |>",
+				"    dplyr::arrange(dplyr::desc(heat_reduction_mean)) |>",
+				"    dplyr::mutate(sowing_window = forcats::fct_reorder(sowing_window, heat_reduction_mean, .desc = TRUE))",
+				"ggplot2::ggplot(",
+				"    heat_summary_plot_data,",
+				"    ggplot2::aes(",
+				"        x = sowing_window,",
 			"        ymin = heat_reduction_q5,",
 			"        lower = heat_reduction_q25,",
 			"        middle = heat_reduction_median,",
@@ -379,7 +379,7 @@
 			") +",
 			"    ggplot2::geom_boxplot(stat = \"identity\") +",
 			"    ggplot2::coord_flip() +",
-			   "    ggplot2::labs(y = \"Heat reduction ratio\", x = \"Sowing Window\")",
+				"    ggplot2::labs(y = \"Heat reduction ratio\", x = \"Scenario\")",
 			"```"
 		)
 	)
