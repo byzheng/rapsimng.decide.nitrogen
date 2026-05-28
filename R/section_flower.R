@@ -188,8 +188,8 @@
 		body = c(
             "<!--",
 			"Narrative:",
-			"- Goal: describe flowering time patterns across sowing windows",
-			"- Context: flowering timing across sowing windows (use table below)",
+			"- Goal: describe flowering time patterns across nitrogen levels without implying optimality",
+			"- Context: flowering timing across nitrogen levels (use table below)",
 			"- Focus: differences in timing and variability without implying optimality",
 			"- Key metrics: mean flowering time and spread (e.g. CV or quantiles)",
 			"- Constraint: do not interpret earlier or later flowering as better or worse",
