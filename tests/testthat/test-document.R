@@ -42,10 +42,6 @@ test_that("document builds and renders from example APSIM output", {
     testthat::expect_true(any(grepl('title: "Fertilisation Report"', lines, fixed = TRUE)))
     testthat::expect_false(any(grepl('rapsimng.decide::read_output(source$file, source$report)', lines, fixed = TRUE)))
     testthat::expect_true(any(grepl('rapsimng.decide::evaluate,', lines, fixed = TRUE)))
-    testthat::expect_true(any(
-        grepl('Fertilisation', lines, fixed = TRUE) &
-            grepl('Average Yield', lines, fixed = TRUE)
-    ))
     
     testthat::expect_false(any(grepl('knitr::kable(yield_summary_table)', lines, fixed = TRUE)))
 

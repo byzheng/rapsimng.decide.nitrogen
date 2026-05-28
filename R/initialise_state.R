@@ -37,6 +37,7 @@
     extras = extras,
     vars = vars,
     columns = list(
+      fertilisation = vars$fertilisation_col,
       sowing_window = vars$sowing_col,
       year = vars$year_col,
       sowing = vars$sowing_col,
