@@ -9,7 +9,7 @@
 
     vars <- context$vars
     required_columns <- c(
-        vars$cultivar_col,
+        vars$nitrogen_col,
         vars$year_col,
         vars$sowing_col,
         vars$flower_col,

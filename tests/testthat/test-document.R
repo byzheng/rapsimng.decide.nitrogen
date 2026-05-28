@@ -20,7 +20,7 @@ test_that("document builds and renders from example APSIM output", {
             notes = c("This is a test report.")
         ),
         vars = list(
-            cultivar_col = "Cultivar",
+            nitrogen_col = "Nitrogen",
             year_col = "Year",
             sowing_col = "SowingDate",
             flower_col = "Wheat.Phenology.FloweringDAS",
