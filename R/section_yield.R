@@ -21,28 +21,44 @@
 }
 
 .compute_yield_summary <- function(state) {
-    state$data |>
-        dplyr::mutate(
-            yield = .data[[state$columns$yield]] / 100
-        ) |>
+	data <- state$data |>
 		dplyr::mutate(
+			yield = .data[[state$columns$yield]] / 100,
 			fertilisation = as.numeric(.data[[state$columns$fertilisation]])
+		)
+
+	# Calculate quantile breaks across ALL data (not per N level)
+	quantiles <- stats::quantile(data$yield, probs = c(0, 0.33, 0.67, 1), na.rm = TRUE)
+	data <- data |>
+		dplyr::mutate(
+			yield_group = dplyr::case_when(
+				.data$yield <= quantiles[2] ~ "Low",
+				.data$yield <= quantiles[3] ~ "Mid",
+				.data$yield > quantiles[3] ~ "High",
+				TRUE ~ NA_character_
+			)
 		) |>
-		dplyr::group_by(.data$fertilisation) |>
-        dplyr::summarise(
-            yield_mean = mean(.data$yield, na.rm = TRUE),
-            yield_sd = stats::sd(.data$yield, na.rm = TRUE),
-			yield_cv = ifelse(.data$yield_mean != 0, .data$yield_sd / .data$yield_mean, NA_real_),
+		dplyr::mutate(
+			yield_group = factor(.data$yield_group, levels = c("Low", "Mid", "High"))
+		)
+
+	# Group by yield_group and fertilisation
+	data |>
+		dplyr::group_by(.data$yield_group, .data$fertilisation) |>
+		dplyr::summarise(
+			yield_mean = mean(.data$yield, na.rm = TRUE),
+			yield_sd = stats::sd(.data$yield, na.rm = TRUE),
+			yield_cv = ifelse(yield_mean != 0, yield_sd / yield_mean, NA_real_),
 			yield_risk = sum(.data$yield < state$criteria$failure$yield_threshold, na.rm = TRUE) / sum(!is.na(.data$yield)),
-            yield_q5 = stats::quantile(.data$yield, 0.05, na.rm = TRUE),
-            yield_q10 = stats::quantile(.data$yield, 0.10, na.rm = TRUE),
+			yield_q5 = stats::quantile(.data$yield, 0.05, na.rm = TRUE),
+			yield_q10 = stats::quantile(.data$yield, 0.10, na.rm = TRUE),
 			yield_q25 = stats::quantile(.data$yield, 0.25, na.rm = TRUE),
 			yield_median = stats::median(.data$yield, na.rm = TRUE),
 			yield_q75 = stats::quantile(.data$yield, 0.75, na.rm = TRUE),
 			yield_q90 = stats::quantile(.data$yield, 0.90, na.rm = TRUE),
 			yield_q95 = stats::quantile(.data$yield, 0.95, na.rm = TRUE),
-            .groups = "drop"
-        )
+			.groups = "drop"
+		)
 }
 
 .build_section_yield_metrics <- function(state) {
@@ -76,13 +92,13 @@
 	)
 }
 
-.yield_summary_table_columns <- function() {
-	c("yield_mean", "yield_sd", "yield_cv", "yield_risk")
-}
+ .yield_summary_table_columns <- function() {
+	 c("yield_mean", "yield_sd", "yield_cv", "yield_risk")
+ }
 
-.yield_summary_group_column <- function(metrics) {
-	"fertilisation"
-}
+ .yield_summary_group_column <- function(metrics) {
+	 c("yield_group", "fertilisation")
+ }
 
 .yield_summary_column_labels <- function(metrics, columns) {
 	defs <- metrics$metric_def |>
@@ -108,17 +124,17 @@
 
 .yield_summary_table_data <- function(metrics, digits = 2) {
 	columns <- .yield_summary_table_columns()
-	group_column <- .yield_summary_group_column(metrics)
+	group_columns <- .yield_summary_group_column(metrics)
 	labels <- .yield_summary_column_labels(metrics, columns)
 
 	table_data <- metrics$value |>
-		dplyr::arrange(dplyr::desc(.data[[group_column]])) |>
-		dplyr::select(dplyr::all_of(c(group_column, columns))) |>
+		dplyr::arrange(yield_group, dplyr::desc(fertilisation)) |>
+		dplyr::select(dplyr::all_of(c(group_columns, columns))) |>
 		dplyr::mutate(
 			dplyr::across(dplyr::all_of(columns), ~ round(.x, digits))
 		)
 
-	colnames(table_data) <- c("Fertilisation", unname(labels[columns]))
+	colnames(table_data) <- c("Yield Group", "Fertilisation", unname(labels[columns]))
 	table_data
 }
 
@@ -195,12 +211,45 @@
 		body = c(
 			"<!--",
 			"Narrative:",
-			"- Goal: summarise",
-			"- Context: yield risk performance across fertilisation levels (use table below)",
-			"- Focus: high yield AND low risk fertilisation levels",
-			"- Key metrics: mean yield, CV, downside risk (proportion of years below threshold)",
-			"- Avoid: over-emphasising extreme outliers",
-			"- Style: concise, farming decision oriented, decision-focused",
+			"",
+			"Goal:",
+			"- Summarise nitrogen response across yield groups and fertilisation levels using aggregated (multi-year) simulation results.",
+			"",
+			"Context:",
+			"- Yield performance is evaluated across nitrogen levels under climate variability.",
+			"- Results are grouped into three yield outcome groups (Low, Mid, High) based on quantiles.",
+			"- The table below provides summary statistics by group and nitrogen level.",
+			"",
+			"Focus:",
+			"- Identify fertilisation levels that balance:",
+			"- stable yield performance (consistency)",
+			"- acceptable downside risk",
+			"- Emphasise trade-offs rather than a single “best” nitrogen level.",
+			"",
+			"Key metrics:",
+			"- Mean yield (central performance)",
+			"- Variability (CV or SD)",
+			"- Downside risk (proportion of years below threshold or low quantile)",
+			"",
+			"Interpretation guidance:",
+			"- Compare nitrogen responses within each yield group (Low, Mid, High)",
+			"- Highlight how nitrogen response differs across seasonal conditions",
+			"- Describe patterns such as:",
+			"- diminishing returns at higher N",
+			"- increased variability at higher N",
+			"- stability at moderate N levels",
+			"",
+			"Avoid:",
+			"- Claiming optimal or recommended nitrogen rate",
+			"- Over-emphasising extreme or rare outcomes",
+			"- Interpreting beyond what simulation outputs support",
+			"",
+			"Style:",
+			"- Concise and clear",
+			"- Farming decision-oriented (practical interpretation)",
+			"- Focus on risk vs reward rather than maximisation",
+			"- Neutral and evidence-based (no prescriptive advice)",
+			"",
 			"-->",
 			"",
 			.render_yield_summary_table_markdown(metrics),
@@ -209,18 +258,16 @@
 			"",
 			.render_yield_summary_metric_notes(metrics),
 			"",
-			"Yield distribution across fertilisation levels shown using quantile-based boxplots.",
+			"Yield distribution across fertilisation levels and yield groups shown using quantile-based boxplots.",
 			"",
 			"```{r}",
 			"#| label: fig-yield-summary-plot",
-			"#| fig-cap: 'Yield summary across fertilisation levels'",
+			"#| fig-cap: 'Yield summary across fertilisation levels and yield groups'",
 			plot_data_lines,
-			"fertilisation_column <- names(yield_summary_data)[[1]]",
 			"yield_summary_plot_data <- yield_summary_data |>",
-			"    dplyr::rename(fertilisation = dplyr::all_of(fertilisation_column)) |>",
-			"	 dplyr::mutate(fertilisation = as.numeric(.data$fertilisation)) |>",
-			"    dplyr::arrange(dplyr::desc(fertilisation)) |>",
-			"    dplyr::mutate(fertilisation = factor(fertilisation))",
+			"    dplyr::mutate(fertilisation = as.numeric(.data$fertilisation)) |>",
+			"    dplyr::arrange(fertilisation, dplyr::desc(fertilisation)) |>",
+			"    dplyr::mutate(fertilisation = factor(fertilisation, levels = sort(unique(fertilisation), decreasing = TRUE)))",
 			"ggplot2::ggplot(",
 			"    yield_summary_plot_data,",
 			"    ggplot2::aes(",
@@ -234,7 +281,8 @@
 			") +",
 			"    ggplot2::geom_boxplot(stat = \"identity\") +",
 			"    ggplot2::coord_flip() +",
-			"    ggplot2::labs(y = \"Yield (t/ha)\", x = \"Fertilisation\")",
+			"    ggplot2::labs(y = \"Yield (t/ha)\", x = \"Fertilisation\") +",
+			"    ggplot2::facet_wrap(~yield_group, nrow = 1)",
 			"```"
 		)
 	)
