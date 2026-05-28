@@ -1,0 +1,26 @@
+Package: rapsimng.decide.sowing
+Title: Analyse APSIM Next Generation Simulation Outputs for Sowing Decision
+Version: 0.1.0
+Authors@R: 
+    person("Bangou", "Zheng", , "zheng.bangyou@gmail.com", role = c("aut", "cre"))
+Description: Provides functions to analyse APSIM Next Generation simulation outputs to support sowing decision under specified environments and management assumptions. The package focuses on transparent, reproducible summarisation of model outputs such as sowing window, establishment risk, and early crop development, without performing APSIM simulations, interpreting user intent, or making normative recommendations.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+Depends: R (>= 4.1.0)
+Imports:
+    dplyr,
+    tibble,
+    rlang,
+    stats,
+    knitr
+Suggests:
+    here,
+    quarto,
+    rapsimng.decide,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+URL: https://sowing.decide.rapsimng.bangyou.me/,
+    https://github.com/byzheng/rapsimng.decide.sowing
+BugReports: https://github.com/byzheng/rapsimng.decide.sowing/issues
+Config/roxygen2/version: 8.0.0

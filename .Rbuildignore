@@ -1,0 +1,17 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+cran-comments.md
+.travis.yml
+^LICENSE.md$
+^CRAN-RELEASE$
+^NEWS.md$
+.*\.bak
+.*\.db-shm
+.*\.db-wal
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
+^CRAN-SUBMISSION$
+^.vscode$
+^dev$
