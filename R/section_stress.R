@@ -26,7 +26,10 @@
 			frost_reduction = .data[[state$columns$frost_reduction]],
 			frost_events = .data[[state$columns$frost_events]]
 		) |>
-		dplyr::group_by(.data[[state$columns$fertilisation]]) |>
+		dplyr::mutate(
+			fertilisation = as.numeric(.data[[state$columns$fertilisation]])
+		) |>
+		dplyr::group_by(.data$fertilisation) |>
 		dplyr::summarise(
 			frost_reduction_mean = mean(.data$frost_reduction, na.rm = TRUE),
 			frost_reduction_sd = stats::sd(.data$frost_reduction, na.rm = TRUE),
@@ -93,7 +96,10 @@
 			heat_reduction = .data[[state$columns$heat_reduction]],
 			heat_events = .data[[state$columns$heat_events]]
 		) |>
-		dplyr::group_by(.data[[state$columns$sowing_window]]) |>
+		dplyr::mutate(
+			fertilisation = as.numeric(.data[[state$columns$fertilisation]])
+		) |>
+		dplyr::group_by(.data$fertilisation) |>
 		dplyr::summarise(
 			heat_reduction_mean = mean(.data$heat_reduction, na.rm = TRUE),
 			heat_reduction_sd = stats::sd(.data$heat_reduction, na.rm = TRUE),
@@ -164,7 +170,7 @@
 }
 
 .stress_summary_group_column <- function(metrics) {
-	names(metrics$value)[[1]]
+	"fertilisation"
 }
 
 .stress_summary_column_labels <- function(metrics, columns) {
@@ -195,8 +201,8 @@
 	labels <- .stress_summary_column_labels(metrics, columns)
 	mean_column <- paste0(prefix, "_reduction_mean")
 
-	table_data <- metrics$value |>
-		dplyr::arrange(dplyr::desc(.data[[mean_column]])) |>
+	   table_data <- metrics$value |>
+		   dplyr::arrange(dplyr::desc(.data[[group_column]])) |>
 		dplyr::select(dplyr::all_of(c(group_column, columns))) |>
 		dplyr::mutate(
 			dplyr::across(dplyr::all_of(columns), ~ round(.x, digits))
@@ -294,15 +300,15 @@
 			"#| label: fig-frost-summary-plot",
 				"#| fig-cap: 'Frost stress summary across scenarios'",
 			plot_data_lines,
-				"sowing_window_column <- names(frost_summary_data)[[1]]",
-				"frost_summary_plot_data <- frost_summary_data |>",
-				"    dplyr::rename(sowing_window = dplyr::all_of(sowing_window_column)) |>",
-				"    dplyr::arrange(dplyr::desc(frost_reduction_mean)) |>",
-				"    dplyr::mutate(sowing_window = forcats::fct_reorder(sowing_window, frost_reduction_mean, .desc = TRUE))",
-				"ggplot2::ggplot(",
-				"    frost_summary_plot_data,",
-				"    ggplot2::aes(",
-				"        x = sowing_window,",
+				   "fertilisation_column <- names(frost_summary_data)[[1]]",
+				   "frost_summary_plot_data <- frost_summary_data |>",
+				   "    dplyr::rename(fertilisation = dplyr::all_of(fertilisation_column)) |>",
+				   "    dplyr::arrange(dplyr::desc(fertilisation)) |>",
+				   "    dplyr::mutate(fertilisation = forcats::fct_reorder(fertilisation, frost_reduction_mean, .desc = TRUE))",
+				   "ggplot2::ggplot(",
+				   "    frost_summary_plot_data,",
+				   "    ggplot2::aes(",
+				   "        x = fertilisation,",
 			"        ymin = frost_reduction_q5,",
 			"        lower = frost_reduction_q25,",
 			"        middle = frost_reduction_median,",
@@ -361,15 +367,15 @@
 			"#| label: fig-heat-summary-plot",
 				"#| fig-cap: 'Heat stress summary across scenarios'",
 			plot_data_lines,
-				"sowing_window_column <- names(heat_summary_data)[[1]]",
-				"heat_summary_plot_data <- heat_summary_data |>",
-				"    dplyr::rename(sowing_window = dplyr::all_of(sowing_window_column)) |>",
-				"    dplyr::arrange(dplyr::desc(heat_reduction_mean)) |>",
-				"    dplyr::mutate(sowing_window = forcats::fct_reorder(sowing_window, heat_reduction_mean, .desc = TRUE))",
-				"ggplot2::ggplot(",
-				"    heat_summary_plot_data,",
-				"    ggplot2::aes(",
-				"        x = sowing_window,",
+				   "fertilisation_column <- names(heat_summary_data)[[1]]",
+				   "heat_summary_plot_data <- heat_summary_data |>",
+				   "    dplyr::rename(fertilisation = dplyr::all_of(fertilisation_column)) |>",
+				   "    dplyr::arrange(dplyr::desc(fertilisation)) |>",
+				   "    dplyr::mutate(fertilisation = forcats::fct_reorder(fertilisation, heat_reduction_mean, .desc = TRUE))",
+				   "ggplot2::ggplot(",
+				   "    heat_summary_plot_data,",
+				   "    ggplot2::aes(",
+				   "        x = fertilisation,",
 			"        ymin = heat_reduction_q5,",
 			"        lower = heat_reduction_q25,",
 			"        middle = heat_reduction_median,",

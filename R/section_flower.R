@@ -24,7 +24,10 @@
 		dplyr::mutate(
 			flower = .data[[state$columns$flower]]
 		) |>
-		dplyr::group_by(.data[[state$columns$fertilisation]]) |>
+		dplyr::mutate(
+			fertilisation = as.numeric(.data[[state$columns$fertilisation]])
+		) |>
+		dplyr::group_by(.data$fertilisation) |>
 		dplyr::summarise(
 			flower_mean = mean(.data$flower, na.rm = TRUE),
 			flower_sd = stats::sd(.data$flower, na.rm = TRUE),
@@ -74,7 +77,7 @@
 }
 
 .flower_summary_group_column <- function(metrics) {
-	names(metrics$value)[[1]]
+	"fertilisation"
 }
 
 .flower_summary_column_labels <- function(metrics, columns) {
@@ -104,8 +107,8 @@
 	group_column <- .flower_summary_group_column(metrics)
 	labels <- .flower_summary_column_labels(metrics, columns)
 
-	table_data <- metrics$value |>
-		dplyr::arrange(.data$flower_mean) |>
+	   table_data <- metrics$value |>
+		   dplyr::arrange(dplyr::desc(.data[[group_column]])) |>
 		dplyr::select(dplyr::all_of(c(group_column, columns))) |>
 		dplyr::mutate(
 			dplyr::across(dplyr::all_of(columns), ~ round(.x, digits))
@@ -206,15 +209,15 @@
 			"#| label: fig-flower-summary-plot",
 			   "#| fig-cap: 'Flowering summary across fertilisation levels'",
 			plot_data_lines,
-			"sowing_window_column <- names(flower_summary_data)[[1]]",
-			"flower_summary_plot_data <- flower_summary_data |>",
-			"    dplyr::rename(sowing_window = dplyr::all_of(sowing_window_column)) |>",
-			"    dplyr::arrange(flower_mean) |>",
-			"    dplyr::mutate(sowing_window = forcats::fct_reorder(sowing_window, flower_mean))",
-			"ggplot2::ggplot(",
-			"    flower_summary_plot_data,",
-			"    ggplot2::aes(",
-			"        x = sowing_window,",
+			   "fertilisation_column <- names(flower_summary_data)[[1]]",
+			   "flower_summary_plot_data <- flower_summary_data |>",
+			   "    dplyr::rename(fertilisation = dplyr::all_of(fertilisation_column)) |>",
+			   "    dplyr::arrange(dplyr::desc(fertilisation)) |>",
+			   "    dplyr::mutate(fertilisation = forcats::fct_reorder(fertilisation, flower_mean))",
+			   "ggplot2::ggplot(",
+			   "    flower_summary_plot_data,",
+			   "    ggplot2::aes(",
+			   "        x = fertilisation,",
 			"        ymin = flower_q5,",
 			"        lower = flower_q25,",
 			"        middle = flower_median,",
