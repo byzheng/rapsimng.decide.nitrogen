@@ -63,25 +63,25 @@
 			"The 95th percentile of yield across all years for each scenario, representing a very high yield scenario."
 		),
         unit = c("t/ha", "t/ha", "t/ha",  "", "t/ha", "t/ha", "t/ha", "t/ha", "t/ha", "t/ha", "t/ha")
-    )
+			table_data
 
     list(
-		name = "yield_summary",
-		value = values,
+			.render_yield_summary_table_caption <- function() {
+			": Summary statistics of yield performance across fertilisation levels. {#tbl-yield-summary}"
 		metric_def = metric_def,
 		description = "The summary statistics of yield across all scenarios and years."
 	)
 }
-
+		"Yield distribution across fertilisation levels shown using quantile-based boxplots.",
 .yield_summary_table_columns <- function() {
 	c("yield_mean", "yield_sd", "yield_cv", "yield_risk")
 }
 
-.yield_summary_group_column <- function(metrics) {
+	"#| fig-cap: 'Yield summary across fertilisation levels'",
 	names(metrics$value)[[1]]
 }
 
-.yield_summary_column_labels <- function(metrics, columns) {
+	"    ggplot2::labs(y = \"Yield (t/ha)\", x = \"Fertilisation\")",
 	defs <- metrics$metric_def |>
 		dplyr::filter(.data$name %in% columns)
 

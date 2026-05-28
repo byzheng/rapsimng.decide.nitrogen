@@ -111,7 +111,7 @@
 			dplyr::across(dplyr::all_of(columns), ~ round(.x, digits))
 		)
 
-	colnames(table_data) <- c("Scenario", unname(labels[columns]))
+	colnames(table_data) <- c("Fertilisation", unname(labels[columns]))
 	table_data
 }
 
@@ -120,8 +120,8 @@
 	as.character(knitr::kable(table_data, format = "pipe"))
 }
 
-.render_flower_summary_table_caption <- function() {
-	": Summary statistics of flowering time across sowing windows. {#tbl-flower-summary}"
+	.render_flower_summary_table_caption <- function() {
+	": Summary statistics of flowering time across fertilisation levels. {#tbl-flower-summary}"
 }
 
 .render_flower_summary_metric_notes <- function(metrics) {
@@ -200,11 +200,11 @@
 			"",
 			.render_flower_summary_metric_notes(metrics),
 			"",
-			"Flowering time distribution across sowing windows shown using quantile-based boxplots.",
+			   "Flowering time distribution across fertilisation levels shown using quantile-based boxplots.",
 			"",
 			"```{r}",
 			"#| label: fig-flower-summary-plot",
-			"#| fig-cap: 'Flowering summary across sowing windows'",
+			   "#| fig-cap: 'Flowering summary across fertilisation levels'",
 			plot_data_lines,
 			"sowing_window_column <- names(flower_summary_data)[[1]]",
 			"flower_summary_plot_data <- flower_summary_data |>",
@@ -224,7 +224,7 @@
 			") +",
 			"    ggplot2::geom_boxplot(stat = \"identity\") +",
 			"    ggplot2::coord_flip() +",
-			"    ggplot2::labs(y = \"Flowering time (Days After Sowing)\", x = \"Sowing Window\")",
+			   "    ggplot2::labs(y = \"Flowering time (Days After Sowing)\", x = \"Fertilisation\")",
 			"```"
 		)
 	)
