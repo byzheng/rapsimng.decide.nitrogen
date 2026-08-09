@@ -1,4 +1,4 @@
 library(testthat)
-library(rapsimng.decide.sowing)
+library(rapsimng.decide.nitrogen)
 
-test_check("rapsimng.decide.sowing")
+test_check("rapsimng.decide.nitrogen")
