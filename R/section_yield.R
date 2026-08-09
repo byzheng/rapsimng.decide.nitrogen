@@ -48,7 +48,7 @@
 		dplyr::summarise(
 			yield_mean = mean(.data$yield, na.rm = TRUE),
 			yield_sd = stats::sd(.data$yield, na.rm = TRUE),
-			yield_cv = ifelse(yield_mean != 0, yield_sd / yield_mean, NA_real_),
+			yield_cv = ifelse(.data$yield_mean != 0, .data$yield_sd / .data$yield_mean, NA_real_),
 			yield_risk = sum(.data$yield < state$criteria$failure$yield_threshold, na.rm = TRUE) / sum(!is.na(.data$yield)),
 			yield_q5 = stats::quantile(.data$yield, 0.05, na.rm = TRUE),
 			yield_q10 = stats::quantile(.data$yield, 0.10, na.rm = TRUE),
@@ -128,7 +128,7 @@
 	labels <- .yield_summary_column_labels(metrics, columns)
 
 	table_data <- metrics$value |>
-		dplyr::arrange(yield_group, dplyr::desc(fertilisation)) |>
+		dplyr::arrange(.data$yield_group, dplyr::desc(.data$fertilisation)) |>
 		dplyr::select(dplyr::all_of(c(group_columns, columns))) |>
 		dplyr::mutate(
 			dplyr::across(dplyr::all_of(columns), ~ round(.x, digits))

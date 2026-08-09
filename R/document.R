@@ -232,16 +232,7 @@ document <- function(
 }
 
 .document_lines <- function(document) {
-	c(
-		document$prefix$body,
-		unlist(lapply(document$sections, function(section) {
-			if (is.null(section)) {
-				return(NULL)
-			}
-
-			c(section$body, "")
-		}), use.names = FALSE)
-	)
+	rapsimng.decide.core::document_lines(document)
 }
 
 .assemble_document <- function(report) {

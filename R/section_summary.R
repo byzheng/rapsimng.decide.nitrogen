@@ -58,7 +58,7 @@
             "- Over-emphasising rare or extreme observations",
             "",
             "Output:",
-            "- 3–5 sentences",
+            "- 3-5 sentences",
             "- Concise summary of key patterns and trade-offs",
             "- Structured and logically ordered (from general to specific)",
             "",
