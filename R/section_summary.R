@@ -54,7 +54,7 @@
             "Avoid:",
             "- Using narrative text from other sections",
             "- Introducing new assumptions or agronomic rules",
-            "- Making recommendations or selecting a “best” nitrogen level",
+            "- Making recommendations or selecting a \"best\" nitrogen level",
             "- Over-emphasising rare or extreme observations",
             "",
             "Output:",

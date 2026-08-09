@@ -224,7 +224,7 @@
 			"- Identify fertilisation levels that balance:",
 			"- stable yield performance (consistency)",
 			"- acceptable downside risk",
-			"- Emphasise trade-offs rather than a single “best” nitrogen level.",
+			"- Emphasise trade-offs rather than a single \"best\" nitrogen level.",
 			"",
 			"Key metrics:",
 			"- Mean yield (central performance)",
