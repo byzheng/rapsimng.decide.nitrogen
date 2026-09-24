@@ -11,7 +11,13 @@
 #'   filtering thresholds.
 #' @param options list controlling output toggles and figure behaviour.
 #' @param ... additional values stored in report metadata for downstream use.
-#' @return A structured decision report as a list containing the evaluation results and metadata.
+#' @return A list with class `"rapsimng_decide_report"` containing four named
+#'   components:
+#'
+#' - `meta`: metadata describing the decision context and execution.
+#' - `metrics`: summary metrics produced by the decision workflow.
+#' - `tables`: tabular outputs ready for reporting.
+#' - `figures`: figure objects, specifications, or references for visual 
 #' @export
 document <- function(
 	data,

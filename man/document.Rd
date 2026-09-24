@@ -19,7 +19,14 @@ filtering thresholds.}
 \item{...}{additional values stored in report metadata for downstream use.}
 }
 \value{
-A structured decision report as a list containing the evaluation results and metadata.
+A list with class \code{"rapsimng_decide_report"} containing four named
+components:
+\itemize{
+\item \code{meta}: metadata describing the decision context and execution.
+\item \code{metrics}: summary metrics produced by the decision workflow.
+\item \code{tables}: tabular outputs ready for reporting.
+\item \code{figures}: figure objects, specifications, or references for visual
+}
 }
 \description{
 Analyse APSIM NG outputs already loaded into R to assess sowing window suitability
