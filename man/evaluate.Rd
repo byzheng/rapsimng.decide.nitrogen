@@ -18,6 +18,9 @@ filtering thresholds.}
 
 \item{...}{additional values stored in report metadata for downstream use.}
 }
+\value{
+A structured decision report as a list containing the evaluation results and metadata.
+}
 \description{
 Analyse APSIM NG outputs already loaded into R to assess sowing window suitability
 under a defined environment and sowing window; returns a structured decision

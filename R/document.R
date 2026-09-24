@@ -11,6 +11,7 @@
 #'   filtering thresholds.
 #' @param options list controlling output toggles and figure behaviour.
 #' @param ... additional values stored in report metadata for downstream use.
+#' @return A structured decision report as a list containing the evaluation results and metadata.
 #' @export
 document <- function(
 	data,
