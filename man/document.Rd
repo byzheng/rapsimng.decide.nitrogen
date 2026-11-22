@@ -25,7 +25,7 @@ components:
 \item \code{meta}: metadata describing the decision context and execution.
 \item \code{metrics}: summary metrics produced by the decision workflow.
 \item \code{tables}: tabular outputs ready for reporting.
-\item \code{figures}: figure objects, specifications, or references for visual
+\item \code{figures}: figure objects, specifications, or references for visual output.
 }
 }
 \description{

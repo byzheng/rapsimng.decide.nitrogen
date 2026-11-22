@@ -17,7 +17,7 @@
 #' - `meta`: metadata describing the decision context and execution.
 #' - `metrics`: summary metrics produced by the decision workflow.
 #' - `tables`: tabular outputs ready for reporting.
-#' - `figures`: figure objects, specifications, or references for visual 
+#' - `figures`: figure objects, specifications, or references for visual output.
 #' @export
 document <- function(
 	data,
