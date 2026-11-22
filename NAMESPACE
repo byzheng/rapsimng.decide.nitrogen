@@ -2,4 +2,5 @@
 
 export(document)
 export(evaluate)
+importFrom(ggplot2,ggplot)
 importFrom(rlang,.data)

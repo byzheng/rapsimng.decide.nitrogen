@@ -1,12 +1,11 @@
 test_that("document builds and renders from example APSIM output", {
     testthat::skip_if_not_installed("here")
     testthat::skip_if_not_installed("quarto")
-    testthat::skip_if_not_installed("rapsimng.decide")
 
     quarto_bin <- tryCatch(quarto::quarto_path(), error = function(...) "")
     testthat::skip_if(!nzchar(quarto_bin), "Quarto CLI is not available")
 
-    data <- rapsimng.decide::read_output(
+    data <- rapsimng.decide.core::read_output(
         system.file("example/fertilisation.apsimx", package = "rapsimng.decide.nitrogen"),
         "HarvestReport"
     ) |>
@@ -40,8 +39,8 @@ test_that("document builds and renders from example APSIM output", {
     lines <- rapsimng.decide.nitrogen:::.document_lines(doc)
 
     testthat::expect_true(any(grepl('title: "Fertilisation Report"', lines, fixed = TRUE)))
-    testthat::expect_false(any(grepl('rapsimng.decide::read_output(source$file, source$report)', lines, fixed = TRUE)))
-    testthat::expect_true(any(grepl('rapsimng.decide::evaluate,', lines, fixed = TRUE)))
+    testthat::expect_false(any(grepl('rapsimng.decide.core::read_output(source$file, source$report)', lines, fixed = TRUE)))
+    testthat::expect_true(any(grepl('rapsimng.decide.nitrogen::evaluate,', lines, fixed = TRUE)))
     
     testthat::expect_false(any(grepl('knitr::kable(yield_summary_table)', lines, fixed = TRUE)))
 

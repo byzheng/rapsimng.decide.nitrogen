@@ -162,7 +162,7 @@ document <- function(
 		options_lines,
 		extras_lines,
 		"report <- do.call(",
-		"    rapsimng.decide::evaluate,",
+		"    rapsimng.decide.nitrogen::evaluate,",
 		"    c(",
 		"        list(data = data, decision='nitrogen', context = context, criteria = criteria, options = options),",
 		"        extras",
@@ -184,7 +184,7 @@ document <- function(
 	reader <- source$reader
 
 	if (is.null(reader) || !nzchar(reader)) {
-		reader <- "rapsimng.decide::read_output"
+		reader <- "rapsimng.decide.core::read_output"
 	}
 
 	c(
